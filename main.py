@@ -6,7 +6,9 @@ import requests
 import firebase_admin
 from dotenv import load_dotenv
 from firebase_admin import credentials, auth
-
+from database import engine, Base
+import CriarTabela 
+Base.metadata.create_all(bind=engine)
 
 load_dotenv()
 app = FastAPI()
