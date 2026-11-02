@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, Date, TIMESTAMP, ForeignKey, Numeric, CheckConstraint, UniqueConstraint
 from sqlalchemy.orm import relationship
 from database import Base
+import sqlite3
 
 class jogo(Base):
     __tablename__ = "jogo"
@@ -50,3 +51,21 @@ class review(Base):
     __table_args__ = (
         CheckConstraint('nota >= 0 AND nota <= 5', name='check_nota_range'),
     )
+    
+#Teste de inserção de dados nas tabelas
+conexao = sqlite3.connect('banco.db')
+cursor = conexao.cursor()
+
+comando_review = """
+INSERT INTO review (id_usuario, id_jogo, nota, texto, data_criacao) 
+VALUES (1, 1, 4.5, 'Ótimo jogo!', '2023-10-01 12:00:00');
+"""
+
+cursor.execute(comando_review)
+conexao.commit()
+
+conexao.close()
+
+print("Avaliação inserida com sucesso")
+    
+
