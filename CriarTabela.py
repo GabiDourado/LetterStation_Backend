@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, Date, TIMESTAMP, ForeignKey, Numeric, CheckConstraint
+from sqlalchemy import Column, Integer, String, Text, Date, TIMESTAMP, ForeignKey, Numeric, CheckConstraint, UniqueConstraint
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -14,20 +14,6 @@ class jogo(Base):
     desenvolvedora = Column(String(255))
     data_atualizacao = Column(TIMESTAMP, nullable=True)
 
-class seguidores(Base):
-    __tablename__ = "seguidores"
-    
-    id_seguidores = Column(Integer, primary_key=True)
-    id_usuario = Column(Integer, ForeignKey("usuario.id_usuario"), nullable=False)
-    seguidores_count = Column(Integer)
-
-class usuario_seguidores(Base):
-    __tablename__ = "usuario_seguidores"
-    
-    usu_seg_id = Column(Integer, primary_key=True)
-    id_usuario = Column(Integer, ForeignKey("usuario.id_usuario"), nullable=False)
-    id_seguidores = Column(Integer, ForeignKey("seguidores.id_seguidores"), nullable=False)
-
 class usuario(Base):
     __tablename__ = "usuario"
     
@@ -38,7 +24,17 @@ class usuario(Base):
     biografica = Column(String(300))
     avatar_url = Column(String(300))
     data_cadastro = Column(TIMESTAMP, nullable=False)
-    usu_seg_id = Column(Integer, ForeignKey("usuario_seguidores.usu_seg_id"), nullable=True)
+
+class usuario_seguidores(Base):
+    __tablename__ = "usuario_seguidores"
+    
+    usu_seg_id = Column(Integer, primary_key=True)
+    id_usuario = Column(Integer, ForeignKey("usuario.id_usuario"), nullable=False)
+    id_seguido = Column(Integer, ForeignKey("usuario.id_usuario"), nullable=False)
+    __table_args__ = (
+        UniqueConstraint("id_usuario", "id_seguido"),
+        CheckConstraint("id_usuario != id_seguido"),
+    )
 
 class review(Base):
     __tablename__ = "review"
