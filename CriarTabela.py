@@ -11,7 +11,7 @@ class jogo(Base):
     descricao = Column(Text)
     data_lancamento = Column(Date)
     capa_url = Column(String(500))
-    desenvolvedora = Column(String(255))
+    desenvolvedor = Column(String(255))
     data_atualizacao = Column(TIMESTAMP, nullable=True)
 
 class usuario(Base):
@@ -21,7 +21,7 @@ class usuario(Base):
     firebase_uid = Column(String(128), nullable=False, unique=True)
     username = Column(String(30), nullable=False, unique=True)
     email = Column(String(128), nullable=False)
-    biografica = Column(String(300))
+    biografia = Column(String(300))
     avatar_url = Column(String(300))
     data_cadastro = Column(TIMESTAMP, nullable=False)
 
