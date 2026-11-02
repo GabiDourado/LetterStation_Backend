@@ -221,3 +221,8 @@ __marimo__/
 
 #Firebase
 firebase-key.json
+
+# Banco de dados
+*.db
+*.sqlite
+*.sqlite3
