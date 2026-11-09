@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
 import os
@@ -13,10 +13,9 @@ from CriarTabela import usuario as UsuarioDB
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import func
 import CriarTabela 
-Base.metadata.create_all(bind=engine)
 
 load_dotenv()
-app = FastAPI()
+router = APIRouter()
 API_KEY = os.getenv("FIREBASE_API_KEY")
 cred = credentials.Certificate("firebase-key.json")
 firebase_admin.initialize_app(cred)
@@ -33,7 +32,7 @@ class LoginUsuario(BaseModel):
     senha: str
 
 
-@app.post("/usuarios")
+@router.post("/usuarios")
 def criar_usuario(usuario: Usuario):
     db = Session()
     novo_usuario = None
@@ -117,7 +116,7 @@ def criar_usuario(usuario: Usuario):
         db.close()
 
 
-@app.post("/login")
+@router.post("/login")
 def login(usuario: LoginUsuario):
     url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={API_KEY}"
     dados = {
@@ -143,7 +142,7 @@ def verificar_token(credenciais: HTTPAuthorizationCredentials = Depends(security
         raise HTTPException(status_code=401, detail="Token inválido")
 
 
-@app.get("/perfil")
+@router.get("/perfil")
 def perfil(usuario = Depends(verificar_token)):
     return {
         "uid": usuario["uid"],
