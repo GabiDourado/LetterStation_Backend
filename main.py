@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Depends, Query #implementado o Query
+from fastapi import FastAPI, HTTPException, Depends, Query, status #implementado o Query
 from auth import router as auth_router
 from auth import verificar_token
 from datetime import date, datetime, timezone #implementado
@@ -24,7 +24,7 @@ def obter_sessao() -> Iterator[ORMSession]: #FUNC implementada para criar sessã
         yield sessao
     finally:
         sessao.close()
-
+        
 #////////a partir daqui, as funções para inegrar a API exeterna com nossa API.///////////////
     
 def consultar_freetogame(endpoint: str, parametros: dict): #FUNC implementada para consultar a API externa FreeToGame
@@ -180,4 +180,3 @@ def obter_jogo(
     sincronizar_jogos([jogo], sessao)
 
     return jogo
-
