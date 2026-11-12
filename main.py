@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from database import engine, Base
 import CriarTabela 
@@ -16,3 +17,11 @@ app.include_router(auth_router)
 app.include_router(usuarios_router)
 app.include_router(reviews_router)
 app.include_router(jogos_router)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
