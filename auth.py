@@ -141,10 +141,3 @@ def verificar_token(credenciais: HTTPAuthorizationCredentials = Depends(security
     except Exception:
         raise HTTPException(status_code=401, detail="Token inválido")
 
-
-@router.get("/perfil")
-def perfil(usuario = Depends(verificar_token)):
-    return {
-        "uid": usuario["uid"],
-        "email": usuario["email"]
-    }

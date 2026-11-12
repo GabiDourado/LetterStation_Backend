@@ -159,7 +159,7 @@ def feed(
     seguidos = select(SeguidorModel.id_seguido).where(
         SeguidorModel.id_usuario == perfil.id_usuario
     )
-    stmt = _consulta_reviews().where(ReviewModel.id_usuario.in_(seguidos))
+    stmt = _consulta_reviews()
     return _listar(db, stmt, limit, offset)
 
 

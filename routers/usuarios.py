@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import delete, func, or_, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session as DBSession
+from firebase_admin import auth
 
 import schemas
 from CriarTabela import review as ReviewModel
@@ -102,20 +103,44 @@ def atualizar_meu_perfil(
 
 @router.delete("/me", status_code=status.HTTP_204_NO_CONTENT)
 def excluir_meu_perfil(
-    perfil: UsuarioModel = Depends(get_perfil_atual), db: DBSession = Depends(get_db)
+    perfil: UsuarioModel = Depends(get_perfil_atual),
+    db: DBSession = Depends(get_db)
 ):
-    """Apaga o perfil, as reviews e os vínculos de seguidor. (A conta do Firebase não é apagada.)"""
-    db.execute(delete(ReviewModel).where(ReviewModel.id_usuario == perfil.id_usuario))
-    db.execute(
-        delete(SeguidorModel).where(
-            or_(
-                SeguidorModel.id_usuario == perfil.id_usuario,
-                SeguidorModel.id_seguido == perfil.id_usuario,
+    """Apaga o perfil, as reviews, os vínculos de seguidor e a conta do Firebase."""
+
+    try:
+        # Exclui a conta do Firebase
+        auth.delete_user(perfil.firebase_uid)
+
+        # Exclui as reviews do usuário
+        db.execute(
+            delete(ReviewModel).where(
+                ReviewModel.id_usuario == perfil.id_usuario
             )
         )
-    )
-    db.delete(perfil)
-    db.commit()
+
+        # Exclui os vínculos de seguidores
+        db.execute(
+            delete(SeguidorModel).where(
+                or_(
+                    SeguidorModel.id_usuario == perfil.id_usuario,
+                    SeguidorModel.id_seguido == perfil.id_usuario,
+                )
+            )
+        )
+
+        # Exclui o perfil local
+        db.delete(perfil)
+
+        # Confirma as alterações
+        db.commit()
+
+    except Exception:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Erro ao excluir o perfil."
+        )
 
 
 # ---------- consulta de usuários (público) ----------
