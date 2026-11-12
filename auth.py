@@ -15,7 +15,7 @@ from sqlalchemy import func
 import CriarTabela 
 
 load_dotenv()
-router = APIRouter()
+router = APIRouter(tags=["Autenticação"])
 API_KEY = os.getenv("FIREBASE_API_KEY")
 cred = credentials.Certificate("firebase-key.json")
 firebase_admin.initialize_app(cred)
