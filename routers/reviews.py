@@ -16,19 +16,30 @@ router = APIRouter(tags=["Reviews"])
 def _consulta_reviews():
     """SELECT de reviews já com username do autor e nome do jogo."""
     return (
-        select(ReviewModel, UsuarioModel.username, JogoModel.nome)
+        select(
+            ReviewModel,
+            UsuarioModel.username,
+            JogoModel.nome,
+            JogoModel.capa_url,
+        )
         .join(UsuarioModel, UsuarioModel.id_usuario == ReviewModel.id_usuario)
         .join(JogoModel, JogoModel.id_jogo == ReviewModel.id_jogo)
     )
 
 
-def _review_dict(r: ReviewModel, username: str, jogo_nome: str) -> dict:
+def _review_dict(
+    r: ReviewModel,
+    username: str,
+    jogo_nome: str,
+    capa_url: str | None,
+) -> dict:
     return {
         "id_avaliacao": r.id_avaliacao,
         "id_usuario": r.id_usuario,
         "username": username,
         "id_jogo": r.id_jogo,
         "jogo_nome": jogo_nome,
+        "capa_url": capa_url,
         "nota": float(r.nota),
         "texto": r.texto,
         "data_criacao": r.data_criacao,

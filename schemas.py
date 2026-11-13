@@ -95,6 +95,7 @@ class ReviewResponse(BaseModel):
     username: str
     id_jogo: int
     jogo_nome: str
+    capa_url: Optional[str] = None
     nota: float
     texto: Optional[str]
     data_criacao: datetime
