@@ -6,7 +6,6 @@ import schemas
 from CriarTabela import jogo as JogoModel
 from CriarTabela import review as ReviewModel
 from CriarTabela import usuario as UsuarioModel
-from CriarTabela import usuario_seguidores as SeguidorModel
 from comum import agora, get_perfil_atual
 from database import get_db
 
@@ -155,10 +154,7 @@ def feed(
     perfil: UsuarioModel = Depends(get_perfil_atual),
     db: DBSession = Depends(get_db),
 ):
-    """Reviews mais recentes das pessoas que o usuário logado segue."""
-    seguidos = select(SeguidorModel.id_seguido).where(
-        SeguidorModel.id_usuario == perfil.id_usuario
-    )
+    """Retorna todas as reviews, das mais recentes às mais antigas."""
     stmt = _consulta_reviews()
     return _listar(db, stmt, limit, offset)
 
