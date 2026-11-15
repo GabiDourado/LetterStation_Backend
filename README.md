@@ -28,7 +28,7 @@ Também é necessário possuir acesso a um projeto Firebase configurado para aut
 1. Clone o repositório:
 
 ```bash
-git clone URL_DO_REPOSITORIO
+git clone https://github.com/GabiDourado/LetterStation_Backend.git
 ```
 
 2. Acesse a pasta do projeto:
@@ -61,6 +61,12 @@ source venv/bin/activate
 
 ```bash
 pip install -r requirements.txt
+```
+
+OBS: se os comandos não funcionarem, adicione "python -m" no início do comando, exemplo:
+
+```bash
+python -m pip install -r requirements.txt
 ```
 
 ## 🔐 Configuração do Firebase
@@ -201,6 +207,6 @@ Caso a origem ou a porta do front-end seja alterada, a configuração de CORS de
 
 ## 👥 Projeto acadêmico
 
-LetterStation é um projeto acadêmico desenvolvido como parte das atividades do curso de Ciência da Computação.
+LetterStation é um projeto acadêmico desenvolvido como parte das atividades do curso de Ciência da Computação, do 4º semestre para a disciplina Aplicações Digitais.
 
 O projeto tem como objetivo desenvolver uma aplicação integrada, utilizando API própria, banco de dados relacional, autenticação e integração com serviços externos.
